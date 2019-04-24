@@ -18,24 +18,24 @@ class Board extends Component {
               onClick={() => this.props.onClick(i)} />
     );
   }
+  createSquares(amountOfRows, amountOfColumns) {
+    const amountOfSquares = amountOfRows * amountOfColumns;
+    let rows = [];
+    let children = [];
+    for (let i = 1; i <= amountOfSquares; i++) {
+      children = children.concat(this.renderSquare(i - 1));
+      if (i % amountOfColumns === 0) {
+        rows = rows.concat(<div class="board-row">{children}</div>);
+        children = [];
+      }
+    }
+
+    return rows;
+  }
   render() {
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {this.createSquares(3, 3)}
       </div>
     );
   }
