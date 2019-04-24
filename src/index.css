@@ -7,10 +7,9 @@ ol, ul {
   padding-left: 30px;
 }
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+.board-row {
+  display: flex;
+  flex-direction: row;
 }
 
 .status {
@@ -18,9 +17,8 @@ ol, ul {
 }
 
 .square {
-  background: #fff;
+  background-color: #fff;
   border: 1px solid #999;
-  float: left;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
@@ -32,12 +30,8 @@ ol, ul {
   width: 34px;
 }
 
-.square:focus {
-  outline: none;
-}
-
-.kbd-navigation .square:focus {
-  background: #ddd;
+.square.marked {
+  background-color: lightyellow;
 }
 
 .game {
