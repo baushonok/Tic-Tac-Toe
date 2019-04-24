@@ -46,11 +46,13 @@ class Game extends Component {
     history: [{
       squares: Array(9).fill(null)
     }],
+    lastChosenStep: -1,
     stepNumber: 0,
     xIsNext: true
   };
   jumpTo(step) {
     this.setState({
+      lastChosenStep: step,
       stepNumber: step,
       xIsNext: (step % 2) === 0
     });
@@ -70,6 +72,7 @@ class Game extends Component {
       history: history.concat([{
         squares: squares,
       }]),
+      lastChosenStep: -1,
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
     });
@@ -84,7 +87,8 @@ class Game extends Component {
         ? `Go to step # ${index}`
         : `Go to the start of the game`;
       return (
-        <li key={index}>
+        <li key={index}
+            className={this.state.lastChosenStep === index ? 'active' : ''}>
           <button onClick={() => this.jumpTo(index)}>
             {description}
           </button>
@@ -103,8 +107,12 @@ class Game extends Component {
                  onClick={(i) => this.handleClick(i)} />
         </div>
         <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
+          <div>
+            {status}
+          </div>
+          <ol className="history-steps">
+            {moves}
+          </ol>
         </div>
       </div>
     );
