@@ -36,7 +36,7 @@ export default class Game extends Component {
     squares[i] = this.nextStep();
     this.setState({
       history: history.concat([{
-        squares: squares,
+        squares,
       }]),
       lastChosenStep: -1,
       gameIsFinished: isLastStep(this.state.stepNumber),
