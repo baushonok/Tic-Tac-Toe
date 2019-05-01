@@ -42,8 +42,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "jest --detectOpenHandles"
+      "pre-commit": "lint-staged"
     }
   }
 }
