@@ -1,52 +1,10 @@
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React, {Component, ReactElement} from 'react';
+import Board from '../Board';
 
 const AMOUNT_OF_ROWS = 3;
 const AMOUNT_OR_COLUMNS = 3;
 
-function Square(props) {
-  return (
-    <button className={`square ${props.isInWinCombination ? 'marked' : ''}`}
-            onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-}
-
-class Board extends Component {
-  renderSquare(i) {
-    return (
-      <Square key={i}
-              value={this.props.squares[i]}
-              onClick={() => this.props.onClick(i)}
-              isInWinCombination={this.props.winCombination.includes(i)} />
-    );
-  }
-  createSquares(amountOfRows, amountOfColumns) {
-    const amountOfSquares = amountOfRows * amountOfColumns;
-    let rows = [];
-    let children = [];
-    for (let i = 1; i <= amountOfSquares; i++) {
-      children = children.concat(this.renderSquare(i - 1));
-      if (i % amountOfColumns === 0) {
-        rows = rows.concat(<div className="board-row" key={i}>{children}</div>);
-        children = [];
-      }
-    }
-
-    return rows;
-  }
-  render() {
-    return (
-      <div>
-        {this.createSquares(this.props.amountOfRows, this.props.amountOfColumns)}
-      </div>
-    );
-  }
-}
-
-class Game extends Component {
+export default class Game extends Component {
   state = {
     history: [{
       squares: Array(9).fill(null)
@@ -56,7 +14,7 @@ class Game extends Component {
     gameIsFinished: false,
     xIsNext: true
   };
-  jumpTo(step) {
+  jumpTo(step: number): void {
     this.setState({
       lastChosenStep: step,
       stepNumber: step,
@@ -64,10 +22,10 @@ class Game extends Component {
       xIsNext: (step % 2) === 0
     });
   }
-  nextStep() {
+  nextStep(): string {
     return this.state.xIsNext ? 'X' : '0';
   }
-  handleClick(i) {
+  handleClick(i: number): void {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice(0);
@@ -86,7 +44,7 @@ class Game extends Component {
       xIsNext: !this.state.xIsNext
     });
   }
-  render() {
+  render(): ReactElement {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const { winner, winCombination } = calculateWinner(current.squares);
@@ -136,14 +94,15 @@ class Game extends Component {
   }
 }
 
-// ========================================
+function getBoardSize(): number {
+  return AMOUNT_OF_ROWS * AMOUNT_OR_COLUMNS;
+}
 
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
+function isLastStep(step: number): boolean {
+  return step === getBoardSize() - 1
+}
 
-function calculateWinner(squares) {
+function calculateWinner(squares: string[]): {winner: string|null, winCombination: number[]} {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -167,16 +126,4 @@ function calculateWinner(squares) {
     winner: null,
     winCombination: []
   };
-}
-
-function getBoardSize() {
-  let size;
-  if (!size) {
-    size = AMOUNT_OF_ROWS * AMOUNT_OR_COLUMNS;
-  }
-  return size;
-}
-
-function isLastStep(step) {
-  return step === getBoardSize() - 1
 }
