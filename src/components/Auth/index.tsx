@@ -4,6 +4,7 @@ import React, {
   FormEvent
 } from 'react';
 import WarningMessage from './WarningMessage';
+import './index.css';
 
 interface IProps {
   onSuccessLoginHandler: () => void,
@@ -38,13 +39,15 @@ export default class Auth extends Component<IProps, IState> {
   handleChangeLogin = (event: SyntheticEvent<HTMLInputElement>) => {
     let target = event.target as HTMLInputElement;
     this.setState({
-      login: target.value
+      login: target.value,
+      showWarning: false,
     });
   }
   handleChangePassword = (event: SyntheticEvent<HTMLInputElement>) => {
     let target = event.target as HTMLInputElement;
     this.setState({
-      password: target.value
+      password: target.value,
+      showWarning: false,
     });
   }
   render() {
