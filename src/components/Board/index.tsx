@@ -1,21 +1,20 @@
-import React, {Component, ReactElement} from 'react';
+import React, { Component, ReactElement } from 'react';
 import Square from '../Square';
 
 interface IProps {
-  squares: string[],
-  onClick: (i: number) => void,
-  winCombination: unknown[],
-  amountOfRows: number,
-  amountOfColumns: number
+  squares: string[];
+  onClick: (i: number) => void;
+  winCombination: unknown[];
+  amountOfRows: number;
+  amountOfColumns: number;
 }
 
 export default class Board extends Component<IProps> {
   renderSquare(i: number): ReactElement {
+    const { squares, onClick, winCombination } = this.props;
+
     return (
-      <Square key={i}
-              value={this.props.squares[i]}
-              onClick={() => this.props.onClick(i)}
-              isInWinCombination={this.props.winCombination.includes(i)} />
+      <Square key={i} index={i} value={squares[i]} onClick={onClick} isInWinCombination={winCombination.includes(i)} />
     );
   }
   createSquares(amountOfRows: number, amountOfColumns: number) {
@@ -25,7 +24,11 @@ export default class Board extends Component<IProps> {
     for (let i = 1; i <= amountOfSquares; i++) {
       children = children.concat(this.renderSquare(i - 1));
       if (i % amountOfColumns === 0) {
-        rows = rows.concat(<div className="board-row" key={i}>{children}</div>);
+        rows = rows.concat(
+          <div className="board-row" key={i}>
+            {children}
+          </div>,
+        );
         children = [];
       }
     }
@@ -33,10 +36,9 @@ export default class Board extends Component<IProps> {
     return rows;
   }
   render() {
-    return (
-      <div>
-        {this.createSquares(this.props.amountOfRows, this.props.amountOfColumns)}
-      </div>
-    );
+    const { amountOfRows, amountOfColumns } = this.props;
+    const rows = this.createSquares(amountOfRows, amountOfColumns);
+
+    return <div>{rows}</div>;
   }
 }

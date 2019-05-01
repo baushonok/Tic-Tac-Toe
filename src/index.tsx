@@ -8,24 +8,20 @@ import './index.css';
 // ========================================
 
 interface IState {
-  isLoggenOn: boolean
+  isLoggedOn: boolean;
 }
 
 class Content extends Component<{}, IState> {
   state = {
-    isLoggenOn: !!localStorage.getItem(IS_LOGGED_ON),
+    isLoggedOn: !!localStorage.getItem(IS_LOGGED_ON),
   };
 
   successLoginHandler = () => {
-    this.setState({ isLoggenOn: true });
-  }
+    this.setState({ isLoggedOn: true });
+  };
 
   render() {
-    const { isLoggenOn } = this.state;
-
-    return isLoggenOn
-      ? <Game />
-      : <Auth onSuccessLoginHandler={this.successLoginHandler} />;
+    return this.state.isLoggedOn ? <Game /> : <Auth onSuccessLoginHandler={this.successLoginHandler} />;
   }
 }
 
@@ -34,7 +30,4 @@ if (!container) {
   throw new Error('Root element does not exist');
 }
 
-ReactDOM.render(
-  <Content />,
-  container
-);
+ReactDOM.render(<Content />, container);
