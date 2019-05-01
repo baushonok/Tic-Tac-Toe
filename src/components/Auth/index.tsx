@@ -4,6 +4,7 @@ import React, {
   FormEvent
 } from 'react';
 import WarningMessage from './WarningMessage';
+import { IS_LOGGED_ON } from './constants';
 import './index.css';
 
 interface IProps {
@@ -13,44 +14,47 @@ interface IProps {
 interface IState {
   login: string,
   password: string,
-  showWarning: boolean
+  shouldShowWarning: boolean
 };
 
 export default class Auth extends Component<IProps, IState> {
   state = {
     login: '',
     password: '',
-    showWarning: false
+    shouldShowWarning: false
   };
 
   login = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { login, password } = this.state;
+
     if (login === 'login' && password === 'password') {
-      localStorage.setItem('isLoggenOn', 'true');
+      localStorage.setItem(IS_LOGGED_ON, 'true');
       this.props.onSuccessLoginHandler();
-    } else {
-      localStorage.removeItem('isLoggenOn');
-      this.setState({
-        showWarning: true
-      });
+      return;
     }
+
+    this.setState({
+      shouldShowWarning: true
+    });
   }
   handleChangeLogin = (event: SyntheticEvent<HTMLInputElement>) => {
     let target = event.target as HTMLInputElement;
     this.setState({
       login: target.value,
-      showWarning: false,
+      shouldShowWarning: false,
     });
   }
   handleChangePassword = (event: SyntheticEvent<HTMLInputElement>) => {
     let target = event.target as HTMLInputElement;
     this.setState({
       password: target.value,
-      showWarning: false,
+      shouldShowWarning: false,
     });
   }
   render() {
+    const { login, password, shouldShowWarning } = this.state;
+
     return (
       <form className="auth-form"
             onSubmit={this.login}>
@@ -61,7 +65,7 @@ export default class Auth extends Component<IProps, IState> {
           <input type="text"
                  id="login"
                  name="login"
-                 value={this.state.login}
+                 value={login}
                  onChange={this.handleChangeLogin} />
         </div>
         <div className="auth-form__password">
@@ -71,12 +75,13 @@ export default class Auth extends Component<IProps, IState> {
           <input type="password"
                  id="password"
                  name="password"
-                 value={this.state.password}
+                 value={password}
                  onChange={this.handleChangePassword} />
         </div>
-        <WarningMessage state={this.state.showWarning} />
+        {shouldShowWarning ? <WarningMessage /> : null}
         <button type="submit"
-                className="auth-form__button">
+                className="auth-form__button"
+                disabled={shouldShowWarning}>
           Log in
         </button>
       </form>

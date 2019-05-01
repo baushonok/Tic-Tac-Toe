@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Auth from './components/Auth';
 import Game from './components/Game';
+import { IS_LOGGED_ON } from './components/Auth/constants';
 import './index.css';
 
 // ========================================
@@ -12,7 +13,7 @@ interface IState {
 
 class Content extends Component<{}, IState> {
   state = {
-    isLoggenOn: !!localStorage.getItem('isLoggenOn'),
+    isLoggenOn: !!localStorage.getItem(IS_LOGGED_ON),
   };
 
   successLoginHandler = () => {
@@ -28,7 +29,12 @@ class Content extends Component<{}, IState> {
   }
 }
 
+const container = document.getElementById('root');
+if (!container) {
+  throw new Error('Root element does not exist');
+}
+
 ReactDOM.render(
   <Content />,
-  document.getElementById('root')
+  container
 );
