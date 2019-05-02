@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import HistoryStepButton from './HistoryStepButton';
+
 import './index.css';
 
 interface ISquare {
@@ -25,9 +27,7 @@ export default class HistorySteps extends Component<IProps> {
 
       return (
         <li key={index} className={lastChosenStep === index ? 'history-step_active' : 'history-step'}>
-          <button onClick={() => this.props.onJumpTo(index)} className="history-step__button">
-            {description}
-          </button>
+          <HistoryStepButton index={index} description={description} onJumpTo={this.props.onJumpTo} />
         </li>
       );
     });

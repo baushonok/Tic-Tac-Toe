@@ -1,0 +1,8 @@
+.history-step__button {
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    background: lightgray;
+    border-radius: 0;
+    border: none;
+}
