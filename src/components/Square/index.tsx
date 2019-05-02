@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export default class Square extends PureComponent<IProps> {
-  render() {
+  public render() {
     const { isInWinCombination, value } = this.props;
     return (
       <button className={`square ${isInWinCombination ? 'marked' : ''}`} onClick={this.clickHandler}>
@@ -17,7 +17,7 @@ export default class Square extends PureComponent<IProps> {
     );
   }
 
-  clickHandler = () => {
+  private clickHandler = () => {
     const { index, onClick } = this.props;
 
     onClick(index);

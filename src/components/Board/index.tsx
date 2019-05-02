@@ -10,14 +10,20 @@ interface IProps {
 }
 
 export default class Board extends Component<IProps> {
-  renderSquare(i: number): ReactElement {
+  public render() {
+    const { amountOfRows, amountOfColumns } = this.props;
+    const rows = this.createSquares(amountOfRows, amountOfColumns);
+
+    return <div>{rows}</div>;
+  }
+  private renderSquare(i: number): ReactElement {
     const { squares, onClick, winCombination } = this.props;
 
     return (
       <Square key={i} index={i} value={squares[i]} onClick={onClick} isInWinCombination={winCombination.includes(i)} />
     );
   }
-  createSquares(amountOfRows: number, amountOfColumns: number) {
+  private createSquares(amountOfRows: number, amountOfColumns: number) {
     const amountOfSquares = amountOfRows * amountOfColumns;
     let rows: ReactElement[] = [];
     let children: ReactElement[] = [];
@@ -34,11 +40,5 @@ export default class Board extends Component<IProps> {
     }
 
     return rows;
-  }
-  render() {
-    const { amountOfRows, amountOfColumns } = this.props;
-    const rows = this.createSquares(amountOfRows, amountOfColumns);
-
-    return <div>{rows}</div>;
   }
 }

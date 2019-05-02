@@ -9,7 +9,8 @@ interface ISquare {
 }
 
 export default class Game extends Component {
-  state = {
+  public state = {
+    gameIsFinished: false,
     history: [
       {
         squares: Array(9).fill(null),
@@ -17,34 +18,10 @@ export default class Game extends Component {
     ],
     lastChosenStep: -1,
     stepNumber: 0,
-    gameIsFinished: false,
     xIsNext: true,
   };
 
-  handleClick = (i: number): void => {
-    const { history: historyOrigin, stepNumber, gameIsFinished, xIsNext } = this.state;
-    const history = historyOrigin.slice(0, stepNumber + 1);
-    const current = history[history.length - 1];
-    const squares = current.squares.slice(0);
-    const { winner } = calculateWinner(squares);
-    if (winner || squares[i] || gameIsFinished) {
-      return;
-    }
-    squares[i] = this.nextStep();
-    this.setState({
-      history: history.concat([
-        {
-          squares,
-        },
-      ]),
-      lastChosenStep: -1,
-      gameIsFinished: isLastStep(stepNumber),
-      stepNumber: history.length,
-      xIsNext: !xIsNext,
-    });
-  };
-
-  render(): ReactElement {
+  public render(): ReactElement {
     const { history, stepNumber, lastChosenStep } = this.state;
     const current = history[stepNumber];
     const { winner, winCombination } = calculateWinner(current.squares);
@@ -76,12 +53,34 @@ export default class Game extends Component {
       </div>
     );
   }
+  private handleClick = (i: number): void => {
+    const { history: historyOrigin, stepNumber, gameIsFinished, xIsNext } = this.state;
+    const history = historyOrigin.slice(0, stepNumber + 1);
+    const current = history[history.length - 1];
+    const squares = current.squares.slice(0);
+    const { winner } = calculateWinner(squares);
+    if (winner || squares[i] || gameIsFinished) {
+      return;
+    }
+    squares[i] = this.nextStep();
+    this.setState({
+      gameIsFinished: isLastStep(stepNumber),
+      history: history.concat([
+        {
+          squares,
+        },
+      ]),
+      lastChosenStep: -1,
+      stepNumber: history.length,
+      xIsNext: !xIsNext,
+    });
+  };
 
   private jumpTo = (step: number): void => {
     this.setState({
+      gameIsFinished: isLastStep(this.state.stepNumber),
       lastChosenStep: step,
       stepNumber: step,
-      gameIsFinished: isLastStep(this.state.stepNumber),
       xIsNext: step % 2 === 0,
     });
   };
@@ -112,17 +111,17 @@ function isLastStep(step: number): boolean {
 
 function calculateWinner(squares: string[]): { winner: string | null; winCombination: number[] } {
   const lines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
+  for (const line of lines) {
+    const [a, b, c] = line;
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return {
+        winCombination: line,
         winner: squares[a],
-        winCombination: lines[i],
       };
     }
   }
   return {
-    winner: null,
     winCombination: [],
+    winner: null,
   };
 }
