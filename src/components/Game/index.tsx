@@ -1,15 +1,12 @@
 import React, { Component, ReactElement } from 'react';
 
 import Board from '../Board';
+import HistorySteps from './HistorySteps';
+
+import { AMOUNT_OF_ROWS, AMOUNT_OR_COLUMNS } from './constants';
+import { isLastStep } from './helpers';
 
 import './index.css';
-
-const AMOUNT_OF_ROWS = 3;
-const AMOUNT_OR_COLUMNS = 3;
-
-interface ISquare {
-  squares: string[] | null[];
-}
 
 export default class Game extends Component {
   public state = {
@@ -25,17 +22,15 @@ export default class Game extends Component {
   };
 
   public render(): ReactElement {
-    const { history, stepNumber, lastChosenStep } = this.state;
+    const { gameIsFinished, history, stepNumber, lastChosenStep } = this.state;
     const current = history[stepNumber];
     const { winner, winCombination } = calculateWinner(current.squares);
-    const moves = this.getMoves(history, lastChosenStep);
-
-    let status;
+    let status: string;
 
     if (winner) {
       status = `Won ${winner}`;
     } else {
-      status = this.state.gameIsFinished ? 'dead heat' : `Next player: ${this.nextStep()}`;
+      status = gameIsFinished ? 'dead heat' : `Next player: ${this.nextStep()}`;
     }
 
     return (
@@ -51,13 +46,13 @@ export default class Game extends Component {
         </div>
         <div className="game__info">
           <div>{status}</div>
-          <ol className="game__history-steps">{moves}</ol>
+          <HistorySteps data={history} lastChosenStep={lastChosenStep} onJumpTo={this.handleJumpTo} />
         </div>
       </div>
     );
   }
   private handleClick = (i: number): void => {
-    const { history: historyOrigin, stepNumber, gameIsFinished, xIsNext } = this.state;
+    const { gameIsFinished, history: historyOrigin, stepNumber, xIsNext } = this.state;
     const history = historyOrigin.slice(0, stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice(0);
@@ -67,7 +62,7 @@ export default class Game extends Component {
     }
     squares[i] = this.nextStep();
     this.setState({
-      gameIsFinished: isLastStep(stepNumber),
+      gameIsFinished: isLastStep(stepNumber, AMOUNT_OF_ROWS, AMOUNT_OR_COLUMNS),
       history: history.concat([
         {
           squares,
@@ -78,40 +73,17 @@ export default class Game extends Component {
       xIsNext: !xIsNext,
     });
   };
-
-  private jumpTo = (step: number): void => {
+  private handleJumpTo = (step: number): void => {
     this.setState({
-      gameIsFinished: isLastStep(this.state.stepNumber),
+      gameIsFinished: isLastStep(this.state.stepNumber, AMOUNT_OF_ROWS, AMOUNT_OR_COLUMNS),
       lastChosenStep: step,
       stepNumber: step,
       xIsNext: step % 2 === 0,
     });
   };
-
   private nextStep = (): string => {
     return this.state.xIsNext ? 'X' : '0';
   };
-
-  private getMoves = (history: ISquare[], lastChosenStep: number) =>
-    history.map((step, index: number) => {
-      const description = index ? `Go to step # ${index}` : 'Go to the start of the game';
-
-      return (
-        <li key={index} className={lastChosenStep === index ? 'history-step_active' : 'history-step'}>
-          <button onClick={() => this.jumpTo(index)} className="history-step__button">
-            {description}
-          </button>
-        </li>
-      );
-    });
-}
-
-function getBoardSize(): number {
-  return AMOUNT_OF_ROWS * AMOUNT_OR_COLUMNS;
-}
-
-function isLastStep(step: number): boolean {
-  return step === getBoardSize() - 1;
 }
 
 function calculateWinner(squares: string[]): { winner: string | null; winCombination: number[] } {
