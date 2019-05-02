@@ -30,11 +30,11 @@ export default class Auth extends Component<IProps, IState> {
       <form className="auth-form" onSubmit={this.login}>
         <div className="auth-form__login">
           <label htmlFor="login">Login</label>
-          <input type="text" id="login" name="login" value={login} onChange={this.handleChangeLogin} />
+          <input type="text" id="login" name="login" value={login} onChange={this.handleChangeLoginForm} />
         </div>
         <div className="auth-form__password">
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" value={password} onChange={this.handleChangePassword} />
+          <input type="password" id="password" name="password" value={password} onChange={this.handleChangeLoginForm} />
         </div>
         {shouldShowWarning ? <WarningMessage /> : null}
         <button type="submit" className="auth-form__button" disabled={shouldShowWarning}>
@@ -57,17 +57,32 @@ export default class Auth extends Component<IProps, IState> {
       shouldShowWarning: true,
     });
   };
-  private handleChangeLogin = (event: SyntheticEvent<HTMLInputElement>) => {
+  private handleChangeLoginForm = (event: SyntheticEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
+    const { name, value } = target;
+    switch (name) {
+      case 'login': {
+        this.changeLogin(value);
+        break;
+      }
+      case 'password': {
+        this.changePassword(value);
+        break;
+      }
+      default: {
+        throw new Error(`Unknown input name ${name}`);
+      }
+    }
+  };
+  private changeLogin = (login: string) => {
     this.setState({
-      login: target.value,
+      login,
       shouldShowWarning: false,
     });
   };
-  private handleChangePassword = (event: SyntheticEvent<HTMLInputElement>) => {
-    const target = event.target as HTMLInputElement;
+  private changePassword = (password: string) => {
     this.setState({
-      password: target.value,
+      password,
       shouldShowWarning: false,
     });
   };
