@@ -1,0 +1,6 @@
+.history-step_active > .history-step__button {
+    background-color: lightblue;
+}
+.history-step_active ~ .history-step > .history-step__button {
+    opacity: .75;
+}
