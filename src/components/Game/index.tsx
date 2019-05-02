@@ -1,14 +1,28 @@
 import React, { Component, ReactElement } from 'react';
 
 import Board from '../Board';
-import HistorySteps from './HistorySteps';
+import Dialog from '../Dialog';
+import HistorySteps, { ISquare } from './HistorySteps';
 
 import { AMOUNT_OF_ROWS, AMOUNT_OR_COLUMNS } from './constants';
 import { isLastStep } from './helpers';
 
 import './index.css';
 
-export default class Game extends Component {
+interface IProps {
+  isFirstLogin: boolean;
+  username: string;
+}
+interface IState {
+  gameIsFinished: boolean;
+  history: ISquare[];
+  lastChosenStep: number;
+  shouldShowSuccessAuthDialog: boolean;
+  stepNumber: number;
+  xIsNext: boolean;
+}
+
+export default class Game extends Component<IProps, IState> {
   public state = {
     gameIsFinished: false,
     history: [
@@ -17,12 +31,14 @@ export default class Game extends Component {
       },
     ],
     lastChosenStep: -1,
+    shouldShowSuccessAuthDialog: this.props.isFirstLogin,
     stepNumber: 0,
     xIsNext: true,
   };
 
   public render(): ReactElement {
-    const { gameIsFinished, history, stepNumber, lastChosenStep } = this.state;
+    const { gameIsFinished, history, lastChosenStep, shouldShowSuccessAuthDialog, stepNumber } = this.state;
+    const { username } = this.props;
     const current = history[stepNumber];
     const { winner, winCombination } = calculateWinner(current.squares);
     let status: string;
@@ -48,6 +64,14 @@ export default class Game extends Component {
           <div>{status}</div>
           <HistorySteps data={history} lastChosenStep={lastChosenStep} onJumpTo={this.handleJumpTo} />
         </div>
+        {shouldShowSuccessAuthDialog ? (
+          <Dialog>
+            <h1>Hi again, {username}!</h1>
+            <button type="button" onClick={this.handleClosingDialog}>
+              Close dialog
+            </button>
+          </Dialog>
+        ) : null}
       </div>
     );
   }
@@ -83,6 +107,11 @@ export default class Game extends Component {
   };
   private nextStep = (): string => {
     return this.state.xIsNext ? 'X' : '0';
+  };
+  private handleClosingDialog = () => {
+    this.setState({
+      shouldShowSuccessAuthDialog: false,
+    });
   };
 }
 

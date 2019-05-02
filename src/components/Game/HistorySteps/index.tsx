@@ -4,7 +4,7 @@ import HistoryStepButton from './HistoryStepButton';
 
 import './index.css';
 
-interface ISquare {
+export interface ISquare {
   squares: string[] | null[];
 }
 

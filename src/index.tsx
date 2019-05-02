@@ -10,19 +10,28 @@ import './index.css';
 // ========================================
 
 interface IState {
+  isFirstLogin: boolean;
   isLoggedOn: boolean;
+  username: string;
 }
 
 class Content extends Component<{}, IState> {
   public state = {
+    isFirstLogin: false,
     isLoggedOn: !!localStorage.getItem(IS_LOGGED_ON),
+    username: '',
   };
 
   public render() {
-    return this.state.isLoggedOn ? <Game /> : <Auth onSuccessLoginHandler={this.successLoginHandler} />;
+    const { isFirstLogin, isLoggedOn, username } = this.state;
+    return isLoggedOn ? (
+      <Game isFirstLogin={isFirstLogin} username={username} />
+    ) : (
+      <Auth onSuccessLoginHandler={this.successLoginHandler} />
+    );
   }
-  private successLoginHandler = () => {
-    this.setState({ isLoggedOn: true });
+  private successLoginHandler = (username: string) => {
+    this.setState({ isLoggedOn: true, isFirstLogin: true, username });
   };
 }
 
