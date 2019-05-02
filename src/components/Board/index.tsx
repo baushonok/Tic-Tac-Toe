@@ -1,5 +1,8 @@
 import React, { Component, ReactElement } from 'react';
+
 import Square from '../Square';
+
+import './index.css';
 
 interface IProps {
   squares: string[];
@@ -14,7 +17,7 @@ export default class Board extends Component<IProps> {
     const { amountOfRows, amountOfColumns } = this.props;
     const rows = this.createSquares(amountOfRows, amountOfColumns);
 
-    return <div>{rows}</div>;
+    return <div className="board">{rows}</div>;
   }
   private renderSquare(i: number): ReactElement {
     const { squares, onClick, winCombination } = this.props;
@@ -31,7 +34,7 @@ export default class Board extends Component<IProps> {
       children = children.concat(this.renderSquare(i - 1));
       if (i % amountOfColumns === 0) {
         rows = rows.concat(
-          <div className="board-row" key={i}>
+          <div className="board__row" key={i}>
             {children}
           </div>,
         );

@@ -1,5 +1,8 @@
 import React, { Component, ReactElement } from 'react';
+
 import Board from '../Board';
+
+import './index.css';
 
 const AMOUNT_OF_ROWS = 3;
 const AMOUNT_OR_COLUMNS = 3;
@@ -37,7 +40,7 @@ export default class Game extends Component {
 
     return (
       <div className="game">
-        <div className="game-board">
+        <div className="game__board">
           <Board
             squares={current.squares}
             onClick={this.handleClick}
@@ -46,9 +49,9 @@ export default class Game extends Component {
             amountOfColumns={AMOUNT_OR_COLUMNS}
           />
         </div>
-        <div className="game-info">
+        <div className="game__info">
           <div>{status}</div>
-          <ol className="history-steps">{moves}</ol>
+          <ol className="game__history-steps">{moves}</ol>
         </div>
       </div>
     );
@@ -94,8 +97,10 @@ export default class Game extends Component {
       const description = index ? `Go to step # ${index}` : 'Go to the start of the game';
 
       return (
-        <li key={index} className={lastChosenStep === index ? 'active' : ''}>
-          <button onClick={() => this.jumpTo(index)}>{description}</button>
+        <li key={index} className={lastChosenStep === index ? 'history-step_active' : 'history-step'}>
+          <button onClick={() => this.jumpTo(index)} className="history-step__button">
+            {description}
+          </button>
         </li>
       );
     });

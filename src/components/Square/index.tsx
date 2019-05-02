@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import './index.css';
+
 interface IProps {
   index: number;
   isInWinCombination: boolean;
@@ -11,7 +13,7 @@ export default class Square extends PureComponent<IProps> {
   public render() {
     const { isInWinCombination, value } = this.props;
     return (
-      <button className={`square ${isInWinCombination ? 'marked' : ''}`} onClick={this.clickHandler}>
+      <button className={`square ${isInWinCombination ? 'square_marked' : ''}`} onClick={this.clickHandler}>
         {value}
       </button>
     );
