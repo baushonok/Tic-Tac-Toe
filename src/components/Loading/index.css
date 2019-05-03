@@ -1,0 +1,7 @@
+.loading {
+    display: flex;
+    flex-direction: row;
+    padding: 16px;
+    color: lightgray;
+    background-color: white;
+}

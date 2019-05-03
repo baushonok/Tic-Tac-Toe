@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import Auth from './components/Auth';
-import Game from './components/Game';
+import Loading from './components/Loading';
 
 import { IS_LOGGED_ON } from './components/Auth/constants';
 
 import './index.css';
+
+const Auth = lazy(() => import('./components/Auth'));
+const Game = lazy(() => import('./components/Game'));
 
 // ========================================
 
@@ -24,10 +26,14 @@ class Content extends Component<{}, IState> {
 
   public render() {
     const { isFirstLogin, isLoggedOn, username } = this.state;
-    return isLoggedOn ? (
-      <Game isFirstLogin={isFirstLogin} username={username} />
-    ) : (
-      <Auth onSuccessLoginHandler={this.successLoginHandler} />
+    return (
+      <Suspense fallback={Loading}>
+        {isLoggedOn ? (
+          <Game isFirstLogin={isFirstLogin} username={username} />
+        ) : (
+          <Auth onSuccessLoginHandler={this.successLoginHandler} />
+        )}
+      </Suspense>
     );
   }
   private successLoginHandler = (username: string) => {
