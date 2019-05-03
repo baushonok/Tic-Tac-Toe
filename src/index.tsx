@@ -1,6 +1,6 @@
 import React, { Component, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import Loading from './components/Loading';
+import Loader from './components/Loader';
 
 import { IS_LOGGED_ON } from './components/Auth/constants';
 
@@ -27,7 +27,7 @@ class Content extends Component<{}, IState> {
   public render() {
     const { isFirstLogin, isLoggedOn, username } = this.state;
     return (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={Loader}>
         {isLoggedOn ? (
           <Game isFirstLogin={isFirstLogin} username={username} />
         ) : (
