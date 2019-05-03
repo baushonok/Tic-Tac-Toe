@@ -1,3 +1,15 @@
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.show-rules-btn {
+    min-width: 100px;
+    max-width: 200px;
+    padding: 0 12px;
+    margin-bottom: 24px;
+}
+
 .game {
     display: flex;
     flex-direction: row;

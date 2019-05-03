@@ -1,4 +1,4 @@
-import React, { Component, ReactElement } from 'react';
+import React, { Component, createRef, ReactElement, RefObject } from 'react';
 
 import Board from '../Board';
 import Dialog from '../Dialog';
@@ -17,6 +17,7 @@ interface IState {
   gameIsFinished: boolean;
   history: ISquare[];
   lastChosenStep: number;
+  shouldShowRules: boolean;
   shouldShowSuccessAuthDialog: boolean;
   stepNumber: number;
   xIsNext: boolean;
@@ -31,13 +32,22 @@ export default class Game extends Component<IProps, IState> {
       },
     ],
     lastChosenStep: -1,
+    shouldShowRules: false,
     shouldShowSuccessAuthDialog: this.props.isFirstLogin,
     stepNumber: 0,
     xIsNext: true,
   };
+  private buttonShowRules = createRef() as RefObject<HTMLButtonElement>;
 
   public render(): ReactElement {
-    const { gameIsFinished, history, lastChosenStep, shouldShowSuccessAuthDialog, stepNumber } = this.state;
+    const {
+      gameIsFinished,
+      history,
+      lastChosenStep,
+      shouldShowRules,
+      shouldShowSuccessAuthDialog,
+      stepNumber,
+    } = this.state;
     const { username } = this.props;
     const current = history[stepNumber];
     const { winner, winCombination } = calculateWinner(current.squares);
@@ -50,31 +60,59 @@ export default class Game extends Component<IProps, IState> {
     }
 
     return (
-      <div className="game">
-        <div className="game__board">
-          <Board
-            squares={current.squares}
-            onClick={this.handleClick}
-            winCombination={winCombination}
-            amountOfRows={AMOUNT_OF_ROWS}
-            amountOfColumns={AMOUNT_OR_COLUMNS}
-          />
+      <main className="content">
+        <button type="button" className="show-rules-btn" onClick={this.handleShowRulesClick} ref={this.buttonShowRules}>
+          Show rules
+        </button>
+        <div className="game">
+          <div className="game__board">
+            <Board
+              squares={current.squares}
+              onClick={this.handleClick}
+              winCombination={winCombination}
+              amountOfRows={AMOUNT_OF_ROWS}
+              amountOfColumns={AMOUNT_OR_COLUMNS}
+            />
+          </div>
+          <div className="game__info">
+            <div>{status}</div>
+            <HistorySteps data={history} lastChosenStep={lastChosenStep} onJumpTo={this.handleJumpTo} />
+          </div>
+          {shouldShowSuccessAuthDialog ? (
+            <Dialog>
+              <h1>Hi again, {username}!</h1>
+              <button type="button" onClick={this.handleClosingDialog}>
+                Close dialog
+              </button>
+            </Dialog>
+          ) : null}
+          {shouldShowRules ? (
+            <Dialog>
+              <h1>Some title</h1>
+              <p>rules</p>
+              <button type="button" onClick={this.handleClosingRules}>
+                Hide rules
+              </button>
+            </Dialog>
+          ) : null}
         </div>
-        <div className="game__info">
-          <div>{status}</div>
-          <HistorySteps data={history} lastChosenStep={lastChosenStep} onJumpTo={this.handleJumpTo} />
-        </div>
-        {shouldShowSuccessAuthDialog ? (
-          <Dialog>
-            <h1>Hi again, {username}!</h1>
-            <button type="button" onClick={this.handleClosingDialog}>
-              Close dialog
-            </button>
-          </Dialog>
-        ) : null}
-      </div>
+      </main>
     );
   }
+
+  private handleShowRulesClick = (): void => {
+    this.setState({
+      shouldShowRules: true,
+    });
+  };
+  private handleClosingRules = (): void => {
+    this.setState({
+      shouldShowRules: false,
+    });
+    if (this.buttonShowRules.current) {
+      this.buttonShowRules.current.focus();
+    }
+  };
   private handleClick = (i: number): void => {
     const { gameIsFinished, history: historyOrigin, stepNumber, xIsNext } = this.state;
     const history = historyOrigin.slice(0, stepNumber + 1);

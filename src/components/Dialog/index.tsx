@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react';
 import './index.css';
 
 interface IProps {
-  children: ReactElement[];
+  children: ReactElement | ReactElement[];
 }
 export default function Dialog(props: IProps) {
   return (
