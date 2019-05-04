@@ -24,29 +24,29 @@ class App extends Component<{}, IState> {
     username: '',
   };
   public render() {
-    const { isFirstLogin, isLoggedOn, username } = this.state;
     return (
       <Router>
         <Suspense fallback={Loader}>
           <Switch>
-            <Route
-              exact
-              path="/"
-              render={() => (
-                <Content
-                  isFirstLogin={isFirstLogin}
-                  isLoggedOn={isLoggedOn}
-                  username={username}
-                  onSuccessLogin={this.handleSuccessLogin}
-                />
-              )}
-            />
+            <Route exact path="/" component={this.getContentComponent} />
             <Route path="/about" component={About} />
           </Switch>
         </Suspense>
       </Router>
     );
   }
+  private getContentComponent = () => {
+    const { isFirstLogin, isLoggedOn, username } = this.state;
+
+    return (
+      <Content
+        isFirstLogin={isFirstLogin}
+        isLoggedOn={isLoggedOn}
+        username={username}
+        onSuccessLogin={this.handleSuccessLogin}
+      />
+    );
+  };
   private handleSuccessLogin = (username: string) => {
     this.setState({ isLoggedOn: true, isFirstLogin: true, username });
   };
