@@ -1,13 +1,14 @@
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import Loader from './components/Loader';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Loader } from './components/Loader';
+
+import About from './components/About';
+import Content from './components/Content';
 
 import { IS_LOGGED_ON } from './components/Auth/constants';
 
 import './index.css';
-
-const Auth = lazy(() => import('./components/Auth'));
-const Game = lazy(() => import('./components/Game'));
 
 // ========================================
 
@@ -16,27 +17,37 @@ interface IState {
   isLoggedOn: boolean;
   username: string;
 }
-
-class Content extends Component<{}, IState> {
+class App extends Component<{}, IState> {
   public state = {
     isFirstLogin: false,
     isLoggedOn: !!localStorage.getItem(IS_LOGGED_ON),
     username: '',
   };
-
   public render() {
-    const { isFirstLogin, isLoggedOn, username } = this.state;
     return (
-      <Suspense fallback={Loader}>
-        {isLoggedOn ? (
-          <Game isFirstLogin={isFirstLogin} username={username} />
-        ) : (
-          <Auth onSuccessLoginHandler={this.successLoginHandler} />
-        )}
-      </Suspense>
+      <Router>
+        <Suspense fallback={Loader}>
+          <Switch>
+            <Route exact path="/" component={this.getContentComponent} />
+            <Route path="/about" component={About} />
+          </Switch>
+        </Suspense>
+      </Router>
     );
   }
-  private successLoginHandler = (username: string) => {
+  private getContentComponent = () => {
+    const { isFirstLogin, isLoggedOn, username } = this.state;
+
+    return (
+      <Content
+        isFirstLogin={isFirstLogin}
+        isLoggedOn={isLoggedOn}
+        username={username}
+        onSuccessLogin={this.handleSuccessLogin}
+      />
+    );
+  };
+  private handleSuccessLogin = (username: string) => {
     this.setState({ isLoggedOn: true, isFirstLogin: true, username });
   };
 }
@@ -46,4 +57,4 @@ if (!container) {
   throw new Error('Root element does not exist');
 }
 
-ReactDOM.render(<Content />, container);
+ReactDOM.render(<App />, container);
