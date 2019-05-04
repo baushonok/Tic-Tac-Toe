@@ -7,7 +7,7 @@ import { IS_LOGGED_ON } from './constants';
 import './index.css';
 
 interface IProps {
-  onSuccessLoginHandler: (username: string) => void;
+  onSuccessLogin: (username: string) => void;
 }
 
 interface IState {
@@ -49,7 +49,7 @@ export default class Auth extends Component<IProps, IState> {
 
     if (this.isAuthDataValid()) {
       localStorage.setItem(IS_LOGGED_ON, 'true');
-      this.props.onSuccessLoginHandler(this.state.login);
+      this.props.onSuccessLogin(this.state.login);
       return;
     }
 

@@ -21,7 +21,8 @@
     "outDir": "public",
     "types": [
       "@types/react",
-      "@types/react-dom"
+      "@types/react-dom",
+      "@types/react-router-dom"
     ]
   },
   "include": [
