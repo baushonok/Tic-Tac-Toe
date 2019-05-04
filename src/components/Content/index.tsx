@@ -1,5 +1,6 @@
-import React, { Component, lazy } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component, lazy, MouseEvent } from 'react';
+
+import Header from './Header';
 
 const Auth = lazy(() => import('../Auth'));
 const Game = lazy(() => import('../Game'));
@@ -9,19 +10,22 @@ interface IProps {
   isLoggedOn: boolean;
   username: string;
   onSuccessLogin: (username: string) => void;
+  onThemeChange: (event: MouseEvent) => void;
 }
 export default class Content extends Component<IProps> {
   public render() {
-    const { isFirstLogin, isLoggedOn, username, onSuccessLogin } = this.props;
+    const { isFirstLogin, isLoggedOn, username, onSuccessLogin, onThemeChange } = this.props;
     return (
-      <main>
-        <Link to="/about">About app</Link>
-        {isLoggedOn ? (
-          <Game isFirstLogin={isFirstLogin} username={username} />
-        ) : (
-          <Auth onSuccessLogin={onSuccessLogin} />
-        )}
-      </main>
+      <div>
+        <Header onThemeChange={onThemeChange} />
+        <main>
+          {isLoggedOn ? (
+            <Game isFirstLogin={isFirstLogin} username={username} />
+          ) : (
+            <Auth onSuccessLogin={onSuccessLogin} />
+          )}
+        </main>
+      </div>
     );
   }
 }
