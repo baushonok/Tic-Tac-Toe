@@ -1,6 +1,6 @@
 import React, { Component, ReactElement } from 'react';
 
-import Square from '../Square';
+import Square from 'components/Square';
 
 import './index.css';
 

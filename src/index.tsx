@@ -1,12 +1,15 @@
-import React, { Component, Suspense } from 'react';
+import React, { Component, MouseEvent, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Loader } from './components/Loader';
 
-import About from './components/About';
-import Content from './components/Content';
+import About from 'components/About';
+import Content from 'components/Content';
+import { Loader } from 'components/Loader';
 
-import { IS_LOGGED_ON } from './components/Auth/constants';
+import { IS_LOGGED_ON } from 'components/Auth/constants';
+import { getRandom } from 'helpers';
+import { DEFAULT_THEME, IThemeContext, ThemeContext } from 'theme-context';
+import { THEMES } from './constants';
 
 import './index.css';
 
@@ -15,24 +18,38 @@ import './index.css';
 interface IState {
   isFirstLogin: boolean;
   isLoggedOn: boolean;
+  theme: string;
   username: string;
+  toggleTheme: (event: MouseEvent) => void;
 }
 class App extends Component<{}, IState> {
-  public state = {
-    isFirstLogin: false,
-    isLoggedOn: !!localStorage.getItem(IS_LOGGED_ON),
-    username: '',
-  };
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      isFirstLogin: false,
+      isLoggedOn: !!localStorage.getItem(IS_LOGGED_ON),
+      theme: DEFAULT_THEME,
+      toggleTheme: this.toggleTheme,
+      username: '',
+    };
+  }
   public render() {
+    const contextObj: IThemeContext = {
+      theme: this.state.theme,
+      toggleTheme: this.state.toggleTheme,
+    };
+
     return (
-      <Router>
-        <Suspense fallback={Loader}>
-          <Switch>
-            <Route exact path="/" component={this.getContentComponent} />
-            <Route path="/about" component={About} />
-          </Switch>
-        </Suspense>
-      </Router>
+      <ThemeContext.Provider value={contextObj}>
+        <Router>
+          <Suspense fallback={Loader}>
+            <Switch>
+              <Route exact path="/" component={this.getContentComponent} />
+              <Route path="/about" component={About} />
+            </Switch>
+          </Suspense>
+        </Router>
+      </ThemeContext.Provider>
     );
   }
   private getContentComponent = () => {
@@ -49,6 +66,12 @@ class App extends Component<{}, IState> {
   };
   private handleSuccessLogin = (username: string) => {
     this.setState({ isLoggedOn: true, isFirstLogin: true, username });
+  };
+  private toggleTheme = (event: MouseEvent) => {
+    const { theme } = this.state;
+    const availableThemes = THEMES.filter(item => item !== theme);
+    const index = getRandom(0, availableThemes.length - 1);
+    this.setState({ theme: availableThemes[index] });
   };
 }
 

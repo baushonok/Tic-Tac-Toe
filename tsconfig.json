@@ -23,7 +23,8 @@
       "@types/react",
       "@types/react-dom",
       "@types/react-router-dom"
-    ]
+    ],
+    "baseUrl": "./src"
   },
   "include": [
     "src"
