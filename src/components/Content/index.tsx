@@ -1,5 +1,6 @@
 import React, { Component, lazy } from 'react';
 
+import ErrorBoundary from 'components/ErrorBoundary';
 import Header from './Header';
 
 const Auth = lazy(() => import('components/Auth'));
@@ -19,7 +20,9 @@ export default class Content extends Component<IProps> {
         <Header />
         <div>
           {isLoggedOn ? (
-            <Game isFirstLogin={isFirstLogin} username={username} />
+            <ErrorBoundary>
+              <Game isFirstLogin={isFirstLogin} username={username} />
+            </ErrorBoundary>
           ) : (
             <Auth onSuccessLogin={onSuccessLogin} />
           )}
