@@ -15,13 +15,14 @@ export default class ErrorBoundary extends Component<IProps, IState> {
     hasError: false,
   };
   public render() {
-    return this.state.hasError ? (
+    return this.state.hasError ? this.getErrorMessage() : this.props.children;
+  }
+  private getErrorMessage() {
+    return (
       <section>
         <h1>Something went wrong</h1>
         <p>Some error info</p>
       </section>
-    ) : (
-      this.props.children
     );
   }
 }
