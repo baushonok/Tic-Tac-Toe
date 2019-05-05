@@ -1,22 +1,27 @@
-import React, { Component, MouseEvent } from 'react';
+import React, { Component } from 'react';
 
 import Button from '../../../Button';
 
-import { Theme } from '../../../../index';
+import { IThemeContext, ThemeContext } from '../../../../theme-context';
 
 import './index.css';
 
-interface IProps {
-  onClick: (event: MouseEvent) => void;
-}
-
-export default class ThemeButton extends Component<IProps> {
-  public static contextType = Theme;
+export default class ThemeButton extends Component {
+  public static contextType = ThemeContext;
 
   public render() {
-    const { onClick } = this.props;
     return (
-      <Button type="button" className="theme-button" onClick={onClick} theme={this.context} content={this.context} />
+      <ThemeContext.Consumer>
+        {(data: IThemeContext) => (
+          <Button
+            type="button"
+            className="theme-button"
+            onClick={data.toggleTheme}
+            theme={data.theme}
+            content={data.theme}
+          />
+        )}
+      </ThemeContext.Consumer>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component, lazy, MouseEvent } from 'react';
+import React, { Component, lazy } from 'react';
 
 import Header from './Header';
 
@@ -10,21 +10,20 @@ interface IProps {
   isLoggedOn: boolean;
   username: string;
   onSuccessLogin: (username: string) => void;
-  onThemeChange: (event: MouseEvent) => void;
 }
 export default class Content extends Component<IProps> {
   public render() {
-    const { isFirstLogin, isLoggedOn, username, onSuccessLogin, onThemeChange } = this.props;
+    const { isFirstLogin, isLoggedOn, username, onSuccessLogin } = this.props;
     return (
       <div>
-        <Header onThemeChange={onThemeChange} />
-        <main>
+        <Header />
+        <div>
           {isLoggedOn ? (
             <Game isFirstLogin={isFirstLogin} username={username} />
           ) : (
             <Auth onSuccessLogin={onSuccessLogin} />
           )}
-        </main>
+        </div>
       </div>
     );
   }

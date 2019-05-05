@@ -1,4 +1,4 @@
-import React, { Component, createContext, MouseEvent, Suspense } from 'react';
+import React, { Component, MouseEvent, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Loader } from './components/Loader';
@@ -8,6 +8,7 @@ import Content from './components/Content';
 
 import { IS_LOGGED_ON } from './components/Auth/constants';
 import { THEMES } from './constants';
+import { DEFAULT_THEME, IThemeContext, ThemeContext } from './theme-context';
 
 import { getRandom } from './helpers';
 
@@ -15,25 +16,32 @@ import './index.css';
 
 // ========================================
 
-const DEFAULT_THEME = THEMES[0];
-export const Theme = createContext(DEFAULT_THEME);
-
 interface IState {
   isFirstLogin: boolean;
   isLoggedOn: boolean;
   theme: string;
   username: string;
+  toggleTheme: (event: MouseEvent) => void;
 }
 class App extends Component<{}, IState> {
-  public state = {
-    isFirstLogin: false,
-    isLoggedOn: !!localStorage.getItem(IS_LOGGED_ON),
-    theme: DEFAULT_THEME,
-    username: '',
-  };
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      isFirstLogin: false,
+      isLoggedOn: !!localStorage.getItem(IS_LOGGED_ON),
+      theme: DEFAULT_THEME,
+      toggleTheme: this.toggleTheme,
+      username: '',
+    };
+  }
   public render() {
+    const contextObj: IThemeContext = {
+      theme: this.state.theme,
+      toggleTheme: this.state.toggleTheme,
+    };
+
     return (
-      <Theme.Provider value={this.state.theme}>
+      <ThemeContext.Provider value={contextObj}>
         <Router>
           <Suspense fallback={Loader}>
             <Switch>
@@ -42,7 +50,7 @@ class App extends Component<{}, IState> {
             </Switch>
           </Suspense>
         </Router>
-      </Theme.Provider>
+      </ThemeContext.Provider>
     );
   }
   private getContentComponent = () => {
@@ -54,7 +62,6 @@ class App extends Component<{}, IState> {
         isLoggedOn={isLoggedOn}
         username={username}
         onSuccessLogin={this.handleSuccessLogin}
-        onThemeChange={this.toggleTheme}
       />
     );
   };

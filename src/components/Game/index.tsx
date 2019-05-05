@@ -5,7 +5,7 @@ import Button from '../Button';
 import Dialog from '../Dialog';
 import HistorySteps, { ISquare } from './HistorySteps';
 
-import { Theme } from '../../index';
+import { ThemeContext } from '../../theme-context';
 import { AMOUNT_OF_ROWS, AMOUNT_OR_COLUMNS } from './constants';
 import { isLastStep } from './helpers';
 
@@ -26,7 +26,7 @@ interface IState {
 }
 
 export default class Game extends Component<IProps, IState> {
-  public static contextType = Theme;
+  public static contextType = ThemeContext;
   public state = {
     gameIsFinished: false,
     history: [
@@ -70,7 +70,7 @@ export default class Game extends Component<IProps, IState> {
           onClick={this.handleShowRulesClick}
           refObj={this.buttonShowRules}
           content="Show rules"
-          theme={this.context}
+          theme={this.context.theme}
         />
         <div className="game">
           <div className="game__board">
