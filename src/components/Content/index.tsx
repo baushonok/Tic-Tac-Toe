@@ -16,18 +16,16 @@ export default class Content extends Component<IProps> {
   public render() {
     const { isFirstLogin, isLoggedOn, username, onSuccessLogin } = this.props;
     return (
-      <div>
+      <ErrorBoundary>
         <Header />
-        <div>
+        <main>
           {isLoggedOn ? (
-            <ErrorBoundary>
-              <Game isFirstLogin={isFirstLogin} username={username} />
-            </ErrorBoundary>
+            <Game isFirstLogin={isFirstLogin} username={username} />
           ) : (
             <Auth onSuccessLogin={onSuccessLogin} />
           )}
-        </div>
-      </div>
+        </main>
+      </ErrorBoundary>
     );
   }
 }

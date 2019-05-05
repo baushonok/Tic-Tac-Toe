@@ -63,15 +63,16 @@ export default class Game extends Component<IProps, IState> {
     }
 
     return (
-      <main className="content">
+      <div className="content">
         <Button
           type="button"
           className="show-rules-btn"
           onClick={this.handleShowRulesClick}
           refObj={this.buttonShowRules}
-          content="Show rules"
           theme={this.context.theme}
-        />
+        >
+          Show rules
+        </Button>
         <div className="game">
           <div className="game__board">
             <Board
@@ -104,7 +105,7 @@ export default class Game extends Component<IProps, IState> {
             </Dialog>
           ) : null}
         </div>
-      </main>
+      </div>
     );
   }
 

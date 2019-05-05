@@ -13,13 +13,9 @@ export default class ThemeButton extends Component {
     return (
       <ThemeContext.Consumer>
         {(data: IThemeContext) => (
-          <Button
-            type="button"
-            className="theme-button"
-            onClick={data.toggleTheme}
-            theme={data.theme}
-            content={data.theme}
-          />
+          <Button type="button" className="theme-button" onClick={data.toggleTheme} theme={data.theme}>
+            {data.theme}
+          </Button>
         )}
       </ThemeContext.Consumer>
     );
