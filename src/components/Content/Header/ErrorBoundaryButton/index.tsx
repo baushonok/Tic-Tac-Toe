@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import Button from 'components/Button';
 
-export default class ErrorBoundaryButton extends Component {
-  public render() {
-    return <Button type="button" onClick={this.handleClick} content="Show error" />;
-  }
-  private handleClick() {
+export default function ErrorBoundaryButton() {
+  function handleClick() {
     throw new Error('Some error');
   }
+  return <Button type="button" onClick={handleClick} content="Show error" />;
 }
