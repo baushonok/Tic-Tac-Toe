@@ -16,7 +16,12 @@ export default class ErrorBoundary extends Component<IProps, IState> {
   };
   public render() {
     if (this.state.hasError) {
-      return <div>Catched error</div>;
+      return (
+        <section>
+          <h1>Something went wrong</h1>
+          <p>Some error info</p>
+        </section>
+      );
     }
     return this.props.children;
   }

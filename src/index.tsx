@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import About from 'components/About';
 import Content from 'components/Content';
-import ErrorBoundary from 'components/ErrorBoundary';
 import { Loader } from 'components/Loader';
 
 import { IS_LOGGED_ON } from 'components/Auth/constants';
@@ -41,18 +40,16 @@ class App extends Component<{}, IState> {
     };
 
     return (
-      <ErrorBoundary>
-        <ThemeContext.Provider value={contextObj}>
-          <Router>
-            <Suspense fallback={Loader}>
-              <Switch>
-                <Route exact path="/" component={this.getContentComponent} />
-                <Route path="/about" component={About} />
-              </Switch>
-            </Suspense>
-          </Router>
-        </ThemeContext.Provider>
-      </ErrorBoundary>
+      <ThemeContext.Provider value={contextObj}>
+        <Router>
+          <Suspense fallback={Loader}>
+            <Switch>
+              <Route exact path="/" component={this.getContentComponent} />
+              <Route path="/about" component={About} />
+            </Switch>
+          </Suspense>
+        </Router>
+      </ThemeContext.Provider>
     );
   }
   private getContentComponent = () => {
