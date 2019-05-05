@@ -15,9 +15,8 @@ interface IProps {
 export default class Board extends Component<IProps> {
   public render() {
     const { amountOfRows, amountOfColumns } = this.props;
-    const rows = this.createSquares(amountOfRows, amountOfColumns);
 
-    return <div className="board">{rows}</div>;
+    return <div className="board">{this.createSquares(amountOfRows, amountOfColumns)}</div>;
   }
   private renderSquare(i: number): ReactElement {
     const { squares, onClick, winCombination } = this.props;
@@ -29,17 +28,8 @@ export default class Board extends Component<IProps> {
   private createSquares(amountOfRows: number, amountOfColumns: number) {
     const amountOfSquares = amountOfRows * amountOfColumns;
     let rows: ReactElement[] = [];
-    let children: ReactElement[] = [];
-    for (let i = 1; i <= amountOfSquares; i++) {
-      children = children.concat(this.renderSquare(i - 1));
-      if (i % amountOfColumns === 0) {
-        rows = rows.concat(
-          <div className="board__row" key={i}>
-            {children}
-          </div>,
-        );
-        children = [];
-      }
+    for (let i = 0; i < amountOfSquares; i++) {
+      rows = rows.concat(this.renderSquare(i));
     }
 
     return rows;
