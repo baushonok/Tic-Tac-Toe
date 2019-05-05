@@ -43,11 +43,6 @@ export default class Game extends Component<IProps, IState> {
   private buttonShowRules = createRef() as RefObject<HTMLButtonElement>;
 
   public render(): ReactElement {
-    if (this.hasRenderError()) {
-      // JS error simulation
-      throw new Error('Some error example');
-    }
-
     const {
       gameIsFinished,
       history,
@@ -163,10 +158,6 @@ export default class Game extends Component<IProps, IState> {
     this.setState({
       shouldShowSuccessAuthDialog: false,
     });
-  };
-  private hasRenderError = (): boolean => {
-    const { lastChosenStep, history } = this.state;
-    return !lastChosenStep && history.length === 1;
   };
 }
 
