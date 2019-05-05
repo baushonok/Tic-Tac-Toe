@@ -1,16 +1,15 @@
 import React, { Component, MouseEvent, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Loader } from './components/Loader';
 
-import About from './components/About';
-import Content from './components/Content';
+import About from 'components/About';
+import Content from 'components/Content';
+import { Loader } from 'components/Loader';
 
-import { IS_LOGGED_ON } from './components/Auth/constants';
+import { IS_LOGGED_ON } from 'components/Auth/constants';
+import { getRandom } from 'helpers';
+import { DEFAULT_THEME, IThemeContext, ThemeContext } from 'theme-context';
 import { THEMES } from './constants';
-import { DEFAULT_THEME, IThemeContext, ThemeContext } from './theme-context';
-
-import { getRandom } from './helpers';
 
 import './index.css';
 

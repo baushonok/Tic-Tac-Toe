@@ -2,8 +2,8 @@ import React, { Component, lazy } from 'react';
 
 import Header from './Header';
 
-const Auth = lazy(() => import('../Auth'));
-const Game = lazy(() => import('../Game'));
+const Auth = lazy(() => import('components/Auth'));
+const Game = lazy(() => import('components/Game'));
 
 interface IProps {
   isFirstLogin: boolean;

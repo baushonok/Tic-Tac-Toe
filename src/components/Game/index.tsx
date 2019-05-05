@@ -1,11 +1,11 @@
 import React, { Component, createRef, ReactElement, RefObject } from 'react';
 
-import Board from '../Board';
-import Button from '../Button';
-import Dialog from '../Dialog';
+import Board from 'components/Board';
+import Button from 'components/Button';
+import Dialog from 'components/Dialog';
 import HistorySteps, { ISquare } from './HistorySteps';
 
-import { ThemeContext } from '../../theme-context';
+import { ThemeContext } from 'theme-context';
 import { AMOUNT_OF_ROWS, AMOUNT_OR_COLUMNS } from './constants';
 import { isLastStep } from './helpers';
 
